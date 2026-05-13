@@ -11,6 +11,11 @@ import { PhotoMode } from './ui/PhotoMode';
 import { FinaleOverlay } from './ui/FinaleOverlay';
 import { useGameStore, getTimeOfDay } from './store/useGameStore';
 
+// Expose for debugging / e2e tests (no-op in release).
+if (typeof window !== 'undefined') {
+  (window as any).useGameStore = useGameStore;
+}
+
 export default function App() {
   const view = useGameStore((s) => s.ui.view);
   const setView = useGameStore((s) => s.setView);

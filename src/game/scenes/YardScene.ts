@@ -157,7 +157,8 @@ export class YardScene extends Phaser.Scene {
   }
 
   private buildHouse() {
-    const house = this.add.image(1200, GROUND_Y - 40, 'house').setOrigin(0.5, 1);
+    const house = this.add.image(1200, GROUND_Y - 30, 'house').setOrigin(0.5, 1);
+    house.setScale(1.15);
     house.setDepth(GROUND_Y);
 
     // Place trees around
@@ -254,12 +255,29 @@ export class YardScene extends Phaser.Scene {
   }
 
   private buildGarland() {
-    // Garland of lights from house to two anchor poles
+    // String the wire as a thin Graphics line so it reads even in daylight.
+    const wire = this.add.graphics();
+    wire.lineStyle(2, 0x2c1a12, 0.65);
+    wire.setDepth(GROUND_Y - 7);
     const points = [
-      { x: 1080, y: GROUND_Y - 320 },
-      { x: 1280, y: GROUND_Y - 260 },
-      { x: 1480, y: GROUND_Y - 320 },
+      { x: 900, y: GROUND_Y - 340 },
+      { x: 1280, y: GROUND_Y - 270 },
+      { x: 1660, y: GROUND_Y - 340 },
     ];
+    wire.beginPath();
+    wire.moveTo(points[0].x, points[0].y);
+    for (let i = 1; i <= 60; i++) {
+      const t = i / 60;
+      const segF = Math.min(t * 2, 1.9999);
+      const seg = Math.floor(segF);
+      const lt = segF - seg;
+      const sag = Math.sin(lt * Math.PI) * 22;
+      const x = points[seg].x + (points[seg + 1].x - points[seg].x) * lt;
+      const y = points[seg].y + (points[seg + 1].y - points[seg].y) * lt + sag;
+      wire.lineTo(x, y);
+    }
+    wire.strokePath();
+
     for (let i = 0; i < 60; i++) {
       const t = i / 59;
       const segF = Math.min(t * 2, 1.9999);
@@ -270,12 +288,13 @@ export class YardScene extends Phaser.Scene {
       const sag = Math.sin(lt * Math.PI) * 18;
       const x = p0.x + (p1.x - p0.x) * lt;
       const y = p0.y + (p1.y - p0.y) * lt + sag;
-      const g = this.add.image(x, y, 'garland').setDepth(GROUND_Y - 6).setAlpha(0.85).setBlendMode(Phaser.BlendModes.ADD);
-      g.setTint([0xffd28a, 0xff9070, 0xffe0a8, 0xa4e0ff][i % 4]);
+      const g = this.add.image(x, y, 'garland').setDepth(GROUND_Y - 6).setBlendMode(Phaser.BlendModes.ADD);
+      g.setTint([0xffd28a, 0xff9070, 0xffe0a8, 0xa4e0ff, 0xffb060][i % 5]);
+      g.setScale(1.6);
       this.tweens.add({
         targets: g,
-        alpha: { from: 0.5, to: 1 },
-        scale: { from: 0.8, to: 1.2 },
+        alpha: { from: 0.6, to: 1 },
+        scale: { from: 1.4, to: 1.9 },
         duration: 800 + Math.random() * 1200,
         yoyo: true,
         repeat: -1,

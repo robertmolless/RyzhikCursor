@@ -28,6 +28,7 @@ export class Cat {
     s.setCollideWorldBounds(true);
     s.setSize(40, 28);
     s.setOffset(28, 50);
+    s.setScale(1.6);
     s.play('cat-idle');
     this.sprite = s;
 

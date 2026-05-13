@@ -14,7 +14,6 @@ export class LightingSystem {
     this.overlay = scene.add.graphics();
     this.overlay.setScrollFactor(0);
     this.overlay.setDepth(900);
-    this.overlay.setBlendMode(Phaser.BlendModes.MULTIPLY);
 
     this.vignette = scene.add.graphics();
     this.vignette.setScrollFactor(0);
@@ -54,17 +53,19 @@ export class LightingSystem {
   private colorForTime(minutes: number): { tint: number; alpha: number; god: number } {
     const h = (minutes / 60) % 24;
     // Define keyframes: hour, tint (rgb), overlay alpha, god ray strength
+    // Keyframes: hour, multiplicative tint (rgb 0-255 → divided by 255),
+    // overall darkness 0..1 (used as multiplier with screen darken), god ray 0..1.
     const keys: Array<[number, [number, number, number], number, number]> = [
-      [0, [12, 18, 40], 0.55, 0],
-      [5, [60, 50, 90], 0.5, 0],
-      [6, [220, 150, 110], 0.18, 0.3],
-      [9, [255, 245, 220], 0.05, 0.6],
-      [13, [255, 250, 235], 0.02, 0.5],
-      [17, [255, 200, 130], 0.18, 0.9],
-      [19, [240, 130, 90], 0.32, 0.7],
-      [20, [120, 80, 130], 0.5, 0.2],
-      [21.5, [40, 40, 90], 0.55, 0],
-      [23.9, [12, 18, 40], 0.55, 0],
+      [0, [60, 75, 130], 0.55, 0],
+      [5, [120, 110, 160], 0.45, 0],
+      [6, [255, 200, 150], 0.18, 0.35],
+      [8, [255, 245, 220], 0.05, 0.55],
+      [13, [255, 252, 240], 0.0, 0.45],
+      [17, [255, 210, 150], 0.12, 0.9],
+      [19, [255, 150, 110], 0.28, 0.7],
+      [20, [180, 110, 150], 0.42, 0.2],
+      [21.5, [80, 80, 130], 0.55, 0],
+      [23.9, [60, 75, 130], 0.55, 0],
     ];
     let a = keys[0];
     let b = keys[keys.length - 1];
@@ -89,13 +90,14 @@ export class LightingSystem {
   update(timeMinutes: number) {
     const { tint, alpha, god } = this.colorForTime(timeMinutes);
     this.overlay.clear();
-    this.overlay.fillStyle(tint, Phaser.Math.Clamp(alpha + 0.25, 0, 0.9));
+    // Tinted overlay — normal blend, low alpha. At noon alpha is near 0
+    // (clear scene), at midnight ~0.55 (deep blue dusk).
+    this.overlay.fillStyle(tint, Phaser.Math.Clamp(alpha, 0, 0.75));
     this.overlay.fillRect(0, 0, GAME_WIDTH, GAME_HEIGHT);
 
-    // God ray (single soft beam from upper-right)
     this.godRay.clear();
     if (god > 0.02) {
-      this.godRay.fillStyle(0xfff0c8, 0.06 * god);
+      this.godRay.fillStyle(0xfff0c8, 0.05 * god);
       for (let i = 0; i < 30; i++) {
         const x = GAME_WIDTH - 80 - i * 8;
         const w = 40 + i * 2;

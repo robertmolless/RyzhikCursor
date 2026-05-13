@@ -49,6 +49,36 @@ await new Promise((r) => setTimeout(r, 500));
 await page.screenshot({ path: '/tmp/r-cassettes.png', fullPage: false });
 await page.keyboard.press('Escape');
 
+// Jump to sunset: set timeMinutes directly via the exposed store.
+await page.evaluate(() => {
+  window.useGameStore.setState({ timeMinutes: 18 * 60 });
+});
+await new Promise((r) => setTimeout(r, 1500));
+await page.screenshot({ path: '/tmp/r-sunset.png', fullPage: false });
+
+// Jump to night
+await page.evaluate(() => {
+  window.useGameStore.setState({ timeMinutes: 22 * 60 + 30 });
+});
+await new Promise((r) => setTimeout(r, 2500));
+await page.screenshot({ path: '/tmp/r-night.png', fullPage: false });
+
+// Trigger rain weather and capture
+await page.evaluate(() => {
+  window.useGameStore.setState({ weather: 'storm', timeMinutes: 22 * 60 + 30 });
+});
+await new Promise((r) => setTimeout(r, 1500));
+await page.screenshot({ path: '/tmp/r-storm.png', fullPage: false });
+
+// Open photo mode
+await page.evaluate(() => {
+  window.useGameStore.setState({ weather: 'clear', timeMinutes: 18 * 60 });
+});
+await new Promise((r) => setTimeout(r, 800));
+await page.keyboard.press('p');
+await new Promise((r) => setTimeout(r, 500));
+await page.screenshot({ path: '/tmp/r-photo.png', fullPage: false });
+
 console.log('=== errors ===');
 console.log(errors.length ? errors.join('\n---\n') : '(none)');
 console.log('=== console warn/error ===');

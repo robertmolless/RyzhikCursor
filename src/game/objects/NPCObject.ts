@@ -22,6 +22,7 @@ export class NPCObject {
     s.setOrigin(0.5, 1);
     s.setDepth(GROUND_Y + 2);
     s.setCollideWorldBounds(true);
+    s.setScale(1.4);
     s.play(`npc-idle-${index}`);
     this.sprite = s;
     this.target = x;
