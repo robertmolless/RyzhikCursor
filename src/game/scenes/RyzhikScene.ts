@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
 import { AudioDirector } from '../../audio/AudioDirector';
-import { collectibles, locations, npcs, quests } from '../content';
-import type { CatIntent, DayPhase, LocationId, NpcDefinition, NpcId, Season, Vec2, Weather } from '../types';
+import { locations, npcs, quests } from '../content';
+import type { CatIntent, DayPhase, LocationId, NpcDefinition, Season, Vec2, Weather } from '../types';
 import { useGameStore } from '../../store/gameStore';
 import { telegramBridge } from '../../telegram/telegramBridge';
 
@@ -942,7 +942,6 @@ export class RyzhikScene extends Phaser.Scene {
   }
 
   private nearestHotspot() {
-    const state = useGameStore.getState();
     return this.hotspots.find((hotspot) => {
       if (hotspot.used) return false;
       if (hotspot.require && !hotspot.require()) return false;

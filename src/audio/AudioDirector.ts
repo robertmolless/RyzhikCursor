@@ -62,6 +62,7 @@ export class AudioDirector {
   private ambience?: Howl;
   private started = false;
   private lastMood = '';
+  private lastAmbience = '';
   private readonly musicBeds: Record<string, string>;
   private readonly ambienceBeds: Record<string, string>;
 
@@ -96,7 +97,7 @@ export class AudioDirector {
       this.lastMood = musicMood;
     }
     this.music?.fade(this.music.volume(), input.musicEnabled ? 0.34 : 0, 650);
-    this.swapAmbience(this.ambienceBeds[ambienceMood], input.ambienceEnabled ? 0.26 : 0);
+    this.swapAmbience(ambienceMood, this.ambienceBeds[ambienceMood], input.ambienceEnabled ? 0.26 : 0);
   }
 
   playInteraction(kind: 'purr' | 'collect' | 'quest' | 'photo') {
@@ -138,11 +139,12 @@ export class AudioDirector {
     this.music.fade(0, volume, 900);
   }
 
-  private swapAmbience(src: string, volume: number) {
-    if (this.ambience?.['_src'] === src) {
+  private swapAmbience(mood: string, src: string, volume: number) {
+    if (this.lastAmbience === mood && this.ambience) {
       this.ambience.fade(this.ambience.volume(), volume, 650);
       return;
     }
+    this.lastAmbience = mood;
     const previous = this.ambience;
     previous?.fade(previous.volume(), 0, 450);
     window.setTimeout(() => previous?.unload(), 520);

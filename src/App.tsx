@@ -1,6 +1,4 @@
 import { useEffect, useMemo, useRef } from 'react';
-import Phaser from 'phaser';
-import { createGame } from './game/createGame';
 import { collectibles, locations, npcs, quests, upgrades } from './game/content';
 import { formatGameTime, useGameStore } from './store/gameStore';
 import { telegramBridge } from './telegram/telegramBridge';
@@ -31,14 +29,19 @@ const seasonLabel = {
 
 function App() {
   const gameRef = useRef<HTMLDivElement | null>(null);
-  const phaserRef = useRef<Phaser.Game | null>(null);
+  const phaserRef = useRef<import('phaser').Game | null>(null);
   const state = useGameStore();
 
   useEffect(() => {
     telegramBridge.init();
     if (!gameRef.current || phaserRef.current) return;
-    phaserRef.current = createGame(gameRef.current);
+    let disposed = false;
+    void import('./game/createGame').then(({ createGame }) => {
+      if (!gameRef.current || disposed) return;
+      phaserRef.current = createGame(gameRef.current);
+    });
     return () => {
+      disposed = true;
       phaserRef.current?.destroy(true);
       phaserRef.current = null;
     };
