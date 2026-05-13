@@ -1,0 +1,111 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+  --ui-radius: 18px;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+  background: #070a16;
+}
+
+/* Letterbox the game canvas. Phaser handles scaling. */
+canvas {
+  display: block;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+@layer components {
+  .glass {
+    background: linear-gradient(
+      135deg,
+      rgba(36, 21, 17, 0.72),
+      rgba(15, 22, 40, 0.55)
+    );
+    backdrop-filter: blur(14px) saturate(115%);
+    -webkit-backdrop-filter: blur(14px) saturate(115%);
+    border: 1px solid rgba(244, 226, 196, 0.16);
+    border-radius: var(--ui-radius);
+    box-shadow:
+      0 18px 60px -20px rgba(0, 0, 0, 0.7),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  }
+
+  .glass-soft {
+    background: linear-gradient(
+      135deg,
+      rgba(36, 21, 17, 0.55),
+      rgba(15, 22, 40, 0.4)
+    );
+    backdrop-filter: blur(10px) saturate(110%);
+    -webkit-backdrop-filter: blur(10px) saturate(110%);
+    border: 1px solid rgba(244, 226, 196, 0.12);
+    border-radius: var(--ui-radius);
+  }
+
+  .btn-cozy {
+    @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-full font-medium tracking-wide
+           border border-dusk-300/30 bg-dusk-700/60 text-dusk-100
+           transition-all duration-200
+           hover:bg-ember-500/30 hover:border-ember-300/60 hover:text-dusk-50
+           active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full text-dusk-100/80
+           hover:text-ember-300 transition-colors duration-200;
+  }
+
+  .pill {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs
+           bg-dusk-800/60 border border-dusk-300/15 text-dusk-100/80;
+  }
+
+  .scanline-vignette {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(
+        ellipse at center,
+        transparent 50%,
+        rgba(0, 0, 0, 0.55) 100%
+      );
+    mix-blend-mode: multiply;
+  }
+
+  .film-grain {
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.07;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 1 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/></svg>");
+    mix-blend-mode: overlay;
+  }
+
+  .title-glow {
+    text-shadow:
+      0 0 24px rgba(255, 168, 74, 0.45),
+      0 2px 0 rgba(0, 0, 0, 0.4);
+  }
+}
+
+/* Hide scrollbars inside scrollable panels but keep functionality. */
+.scroll-soft {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(244, 226, 196, 0.25) transparent;
+}
+.scroll-soft::-webkit-scrollbar {
+  width: 6px;
+}
+.scroll-soft::-webkit-scrollbar-thumb {
+  background: rgba(244, 226, 196, 0.25);
+  border-radius: 3px;
+}
