@@ -735,9 +735,9 @@ export class RyzhikGame {
     const worldRight = this.cameraX + this.app.screen.width + 120;
     const x = worldLeft + Math.random() * (worldRight - worldLeft);
     let y = this.cameraY - 40 + Math.random() * this.app.screen.height;
-    let vx = 0;
-    let vy = 0;
-    let life = 2;
+    let vx: number;
+    let vy: number;
+    let life: number;
 
     if (kind === 'rain') {
       y = this.cameraY - 80;
