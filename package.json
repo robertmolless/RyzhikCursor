@@ -1,0 +1,56 @@
+{
+  "name": "ryzhik-country-house",
+  "version": "0.1.0",
+  "description": "Atmospheric narrative cozy life-sim about Ryzhik the ginger cat and an old country house.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "lint": "eslint .",
+    "typecheck": "tsc -b"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/robertmolless/RyzhikCursor.git"
+  },
+  "keywords": [
+    "indie-game",
+    "react",
+    "pixi",
+    "cozy",
+    "telegram-mini-app"
+  ],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/robertmolless/RyzhikCursor/issues"
+  },
+  "homepage": "https://robertmolless.github.io/RyzhikCursor/",
+  "dependencies": {
+    "firebase": "^12.13.0",
+    "howler": "^2.2.4",
+    "lucide-react": "^1.14.0",
+    "pixi.js": "^8.18.1",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6",
+    "zustand": "^5.0.13"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@tailwindcss/vite": "^4.3.0",
+    "@types/howler": "^2.2.12",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "autoprefixer": "^10.5.0",
+    "eslint": "^10.3.0",
+    "globals": "^17.6.0",
+    "postcss": "^8.5.14",
+    "tailwindcss": "^4.3.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.59.3",
+    "vite": "^8.0.12"
+  }
+}
